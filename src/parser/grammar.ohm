@@ -1,0 +1,92 @@
+Expr {
+  MAIN
+    = Declaration* -- declarations
+
+  Declaration
+    = "let" ident+ "=" Exp -- letDecl
+
+  Exp
+    = AndExpr
+
+    AndExpr
+    = AndExpr "&&" OrExpr -- and
+    | OrExpr
+
+  OrExpr
+    = OrExpr "||" CompExp -- or
+    | CompExp
+
+  CompExp
+    = CompExp "<" EqExpr -- lt
+    | CompExp "<=" EqExpr -- lte
+    | CompExp ">" EqExpr -- gt
+    | CompExp ">=" EqExpr -- gte
+    | EqExpr
+
+  EqExpr
+    = EqExpr "==" AddExp -- eq
+    | EqExpr "!=" AddExp -- neq
+    | AddExp
+
+  AddExp
+    = AddExp "+" MulExp  -- plus
+    | AddExp "-" MulExp  -- minus
+    | AddExp "++" MulExp  -- concat
+    | MulExp
+
+  mul = "/" ~"/"
+
+  MulExp
+    = MulExp "*" ExpExp  -- mult
+    | MulExp mul ExpExp  -- divide
+    | MulExp "%" ExpExp  -- rem
+    | ExpExp
+
+  ExpExp
+    = ExpExp "^" ExpExp  -- power
+    | NotExp
+
+  NotExp
+    = "!" NotExp -- not
+    | ApplyExpr
+
+  ApplyExpr
+    = PriExp+  -- apply
+
+  PriExp
+    = "(" Exp ")"  -- paren
+    | "let" ident+ "=" Exp "in" Exp -- let
+    | "\\" ident+ "->" Exp -- abs
+    | "if" Exp "then" Exp "else" Exp -- if
+    | ident
+    | number
+    | string
+
+  ident  (an identifier)
+    = ~keyword identHead identBody*
+
+  identHead
+    = letter
+    | "_"
+  
+  identBody
+    = alnum
+    | "_"
+  
+
+  number  (a number)
+    = digit* "." digit+  -- fract
+    | digit+             -- whole
+    | "-" number  -- neg
+
+   literalCh
+    = "\\" any           -- escaped
+    | ~"\"" any          -- nonEscaped
+
+  stringDelimiter = "\""
+
+  string
+    = stringDelimiter (~stringDelimiter literalCh)* stringDelimiter
+
+  keyword = "let" | "in" | "if" | "then" | "else"
+}

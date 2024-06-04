@@ -1,0 +1,25 @@
+{
+  "name": "mini-ml-workshop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "generate:parser": "ohm generateBundles --withTypes src/parser/grammar.ohm",
+    "test:w": "vitest",
+    "test:run": "vitest --run --coverage",
+    "ts:build": "tsc",
+    "ts:watch": "tsc --watch",
+    "format:check": "prettier --check --cache ./**/*.ts",
+    "format:write": "prettier --write --cache ./**/*.ts"
+  },
+  "dependencies": {
+    "ohm-js": "^17.1.0"
+  },
+  "devDependencies": {
+    "@ohm-js/cli": "^2.0.0",
+    "@vitest/ui": "^1.6.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
